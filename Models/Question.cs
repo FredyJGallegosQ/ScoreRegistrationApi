@@ -10,5 +10,7 @@ namespace RegistroNotasApi.Models
         public long id{get; set;}
         public string question{get; set;}
         public long examId{get; set;}
+        public IEnumerable<Alternatives> alternatives{get; set;}
+
     }
 }

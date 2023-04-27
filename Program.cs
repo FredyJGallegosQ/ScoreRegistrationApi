@@ -10,7 +10,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<Context>(opt => opt.UseInMemoryDatabase("Teacher"));
+// builder.Services.AddDbContext<Context>(opt => opt.UseInMemoryDatabase("Teacher"));
+//builder.Services.AddDbContext<Context>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("connection_sql")));
+builder.Services.AddDbContext<Context>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("conection_pg")));
 
 var app = builder.Build();
 

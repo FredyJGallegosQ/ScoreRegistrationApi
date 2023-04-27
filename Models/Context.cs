@@ -15,6 +15,7 @@ namespace RegistroNotasApi.Models
         public DbSet<Answer> answers{get; set;}
         public DbSet<Chapter> chapters{get; set;}
         public DbSet<Course> courses{get; set;}
+        public DbSet<CourseRegistration> courseRegistrations{get; set;}
         public DbSet<Exam> exams{get; set;}
         public DbSet<Facultad> facultads{get; set;}
         public DbSet<PS> ps{get; set;}
@@ -23,6 +24,7 @@ namespace RegistroNotasApi.Models
         public DbSet<Semester> semesters{get; set;}
         public DbSet<Student> students{get; set;}
         public DbSet<Teacher> teachers{get; set;}
+        public DbSet<TeacherCourse> teacherCourses{get; set;}
         
     }
 }

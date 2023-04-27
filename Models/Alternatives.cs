@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,6 +16,8 @@ namespace RegistroNotasApi.Models
         public string alternative5{get; set;}
         public string answer{get; set;}
         public long questionId{get; set;}
+        [ForeignKey(nameof(questionId))]
+        public Question question{get; set;}
 
     }
 }
