@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using RegistroNotasApi.BusinessService;
+using RegistroNotasApi.DataService;
 using RegistroNotasApi.Models;
 
 namespace RegistroNotasApi.Controllers
@@ -11,46 +13,29 @@ namespace RegistroNotasApi.Controllers
     [Route("[controller]")]
     public class AlternativesController
     {
-        private Context _contex;
-        public AlternativesController(Context context){
-            _contex = context;
+        private AlternativesBusinessService _alternativesBusinessService;
+        public AlternativesController(AlternativesBusinessService alternativesBusinessService){
+            _alternativesBusinessService = alternativesBusinessService;
         }
         [HttpGet]
         public IEnumerable<Alternatives> get(){
-            return _contex.alternatives.ToList();
+            return _alternativesBusinessService.get();
         }
         [HttpGet("{id}")]
         public Alternatives? get(long id){
-            var alternativesDb = _contex.alternatives.Find(id);
-            if(alternativesDb == null) return null;
-            return alternativesDb;
+            return _alternativesBusinessService.get(id);
         }
         [HttpPost]
-        public Alternatives? post(Alternatives alternatives){
-            _contex.alternatives.Add(alternatives);
-            _contex.SaveChanges();
-            return alternatives;
+        public Alternatives? post(AlternativesVM alternatives){
+            return _alternativesBusinessService.post(alternatives);
         }
         [HttpPut]
         public Alternatives? update(Alternatives alternatives){
-            var alternativesDb = _contex.alternatives.Find(alternatives.id);
-            if(alternativesDb == null) return null;
-            alternativesDb.alternative1 = alternatives.alternative1;
-            alternativesDb.alternative2 = alternatives.alternative2;
-            alternativesDb.alternative3 = alternatives.alternative3;
-            alternativesDb.alternative4 = alternatives.alternative4;
-            alternativesDb.alternative5 = alternatives.alternative5;
-            alternativesDb.answer = alternatives.answer;
-            _contex.SaveChanges();
-            return alternativesDb;
+            return _alternativesBusinessService.update(alternatives);
         }
         [HttpDelete("{id}")]
         public string delete(long id){
-            var alternativesDb = _contex.alternatives.Find(id);
-            if(alternativesDb == null) return "No existe registro";
-            _contex.alternatives.Remove(alternativesDb);
-            _contex.SaveChanges();
-            return "Registro " + id + " se eliminó satisfactoriamente";
+            return _alternativesBusinessService.delete(id);
         }
     }
 }
