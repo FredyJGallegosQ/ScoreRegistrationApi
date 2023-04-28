@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RegistroNotasApi.Models;
+using RegistroNotasApi.BusinessService;
 
 namespace RegistroNotasApi.Controllers
 {
@@ -11,41 +12,29 @@ namespace RegistroNotasApi.Controllers
     [Route("[controller]")]
     public class CourseController: ControllerBase
     {
-        private Context _context;
-        public CourseController(Context context){
-            _context = context;
+        private CourseBusinessService _courseBusinessService;
+        public CourseController(CourseBusinessService courseBusinessService ){
+            _courseBusinessService = courseBusinessService;
         }
         [HttpGet]
         public IEnumerable<Course> get(){
-            return _context.courses.ToList();
+            return _courseBusinessService.get();
         }
         [HttpGet("{id}")]
         public Course? get(long id){
-            var courseDb = _context.courses.Find(id);
-            return courseDb;
+            return _courseBusinessService.get(id);
         }
         [HttpPost]
-        public Course post(Course course){
-            _context.courses.Add(course);
-            _context.SaveChanges();
-            return course;
+        public Course? post(CourseVM Course){
+            return _courseBusinessService.post(Course);
         }
         [HttpPut]
-        public Course? update(Course course){
-            var courseDb = _context.courses.Find(course.id);
-            courseDb.name = course.name;
-            _context.SaveChanges();
-            return course;
-
+        public Course? update(CourseVM Course){
+            return _courseBusinessService.update(Course);
         }
         [HttpDelete("{id}")]
         public string delete(long id){
-            var courseDb = _context.courses.Find(id);
-            if(courseDb == null) return "Registro no existe";
-            _context.courses.Remove(courseDb);
-            _context.SaveChanges();
-            return "Registro " + id + " se eliminó satisfactoriamente";
-
+            return _courseBusinessService.delete(id);
         }
     }
 }

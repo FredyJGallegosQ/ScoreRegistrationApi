@@ -4,48 +4,36 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RegistroNotasApi.Models;
-
+using RegistroNotasApi.BusinessService;
 namespace RegistroNotasApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     public class ChapterController: ControllerBase
     {
-        private Context _context;
-        public ChapterController(Context context){
-            _context = context;
+        private ChapterBusinessService _chapterBusinessService;
+        public ChapterController(ChapterBusinessService chapterBusinessService){
+            _chapterBusinessService = chapterBusinessService;
         }
         [HttpGet]
         public IEnumerable<Chapter> get(){
-            return _context.chapters.ToList();
+            return _chapterBusinessService.get();
         }
         [HttpGet("{id}")]
         public Chapter? get(long id){
-            var ChapterDb = _context.chapters.Find(id);
-            return ChapterDb;
+            return _chapterBusinessService.get(id);
         }
         [HttpPost]
-        public Chapter post(Chapter chapter){
-            _context.chapters.Add(chapter);
-            _context.SaveChanges();
-            return chapter;
+        public Chapter? post(ChapterVM Chapter){
+            return _chapterBusinessService.post(Chapter);
         }
         [HttpPut]
-        public Chapter? update(Chapter chapter){
-            var ChapterDb = _context.chapters.Find(chapter.id);
-            if(ChapterDb == null) return null;
-            ChapterDb.name = chapter.name;
-            ChapterDb.courseId = chapter.courseId;
-            _context.SaveChanges();
-            return chapter;
+        public Chapter? update(ChapterVM Chapter){
+            return _chapterBusinessService.update(Chapter);
         }
         [HttpDelete("{id}")]
         public string delete(long id){
-            var ChapterDb = _context.chapters.Find(id);
-            if(ChapterDb == null) return "Registro no existe";
-            _context.chapters.Remove(ChapterDb);
-            _context.SaveChanges();
-            return "Registro " + id + " se eliminó satisfactoriamente";
+            return _chapterBusinessService.delete(id);
         }
     }
 }

@@ -11,5 +11,13 @@ namespace RegistroNotasApi.Models
         public string name{get; set;}
         public DateTime initDate{get; set;}
         public DateTime endDate{get; set;}
+        public IEnumerable<Registration>? registrations{get; set;}
+    }
+    public class SemesterVM
+    {
+        public long id{get; set;}
+        public string name{get; set;}
+        public DateTime initDate{get; set;}
+        public DateTime endDate{get; set;}
     }
 }

@@ -9,5 +9,13 @@ namespace RegistroNotasApi.Models
     {
         public long id{get; set;}
         public string name{get; set;}
+        public IEnumerable<PS> pSs{get; set;}
+
+    }
+    public class FacultadVM
+    {
+        public long id{get; set;}
+        public string name{get; set;}
+
     }
 }

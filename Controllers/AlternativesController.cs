@@ -30,7 +30,7 @@ namespace RegistroNotasApi.Controllers
             return _alternativesBusinessService.post(alternatives);
         }
         [HttpPut]
-        public Alternatives? update(Alternatives alternatives){
+        public Alternatives? update(AlternativesVM alternatives){
             return _alternativesBusinessService.update(alternatives);
         }
         [HttpDelete("{id}")]

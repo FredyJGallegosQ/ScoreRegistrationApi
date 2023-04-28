@@ -21,6 +21,7 @@ namespace RegistroNotasApi.Models
 
     }
     public class AlternativesVM{
+        public long id{get; set;}
         public string alternative1{get; set;}
         public string alternative2{get; set;}
         public string alternative3{get; set;}
