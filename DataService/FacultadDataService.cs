@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using RegistroNotasApi.Models;
 
 namespace RegistroNotasApi.DataService
@@ -13,7 +14,7 @@ namespace RegistroNotasApi.DataService
             _context = context;
         }
         public IEnumerable<Facultad> get(){
-            return _context.facultads.ToList();
+            return _context.facultads.Include(f => f.pSs).ToList();
         }
         public Facultad? get(long id){
             var facultadDb = _context.facultads.Find(id);

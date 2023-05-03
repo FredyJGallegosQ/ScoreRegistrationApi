@@ -81,6 +81,8 @@ namespace RegistroNotasApi.Migrations
 
                     b.HasKey("id");
 
+                    b.HasIndex("questionId");
+
                     b.ToTable("answers");
                 });
 
@@ -100,6 +102,8 @@ namespace RegistroNotasApi.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("id");
+
+                    b.HasIndex("courseId");
 
                     b.ToTable("chapters");
                 });
@@ -137,6 +141,10 @@ namespace RegistroNotasApi.Migrations
 
                     b.HasKey("id");
 
+                    b.HasIndex("courseId");
+
+                    b.HasIndex("registrationId");
+
                     b.ToTable("courseRegistrations");
                 });
 
@@ -158,6 +166,8 @@ namespace RegistroNotasApi.Migrations
                         .HasColumnType("real");
 
                     b.HasKey("id");
+
+                    b.HasIndex("chapterId");
 
                     b.ToTable("exams");
                 });
@@ -196,6 +206,8 @@ namespace RegistroNotasApi.Migrations
 
                     b.HasKey("id");
 
+                    b.HasIndex("facultadId");
+
                     b.ToTable("ps");
                 });
 
@@ -216,6 +228,8 @@ namespace RegistroNotasApi.Migrations
 
                     b.HasKey("id");
 
+                    b.HasIndex("examId");
+
                     b.ToTable("questions");
                 });
 
@@ -227,9 +241,6 @@ namespace RegistroNotasApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("id"));
 
-                    b.Property<long>("courseId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("psId")
                         .HasColumnType("bigint");
 
@@ -240,6 +251,12 @@ namespace RegistroNotasApi.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("id");
+
+                    b.HasIndex("psId");
+
+                    b.HasIndex("semesterId");
+
+                    b.HasIndex("studentId");
 
                     b.ToTable("registrations");
                 });
@@ -339,6 +356,10 @@ namespace RegistroNotasApi.Migrations
 
                     b.HasKey("id");
 
+                    b.HasIndex("courseId");
+
+                    b.HasIndex("teacherId");
+
                     b.ToTable("teacherCourses");
                 });
 
@@ -353,9 +374,180 @@ namespace RegistroNotasApi.Migrations
                     b.Navigation("question");
                 });
 
+            modelBuilder.Entity("RegistroNotasApi.Models.Answer", b =>
+                {
+                    b.HasOne("RegistroNotasApi.Models.Question", "question")
+                        .WithMany("answers")
+                        .HasForeignKey("questionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("question");
+                });
+
+            modelBuilder.Entity("RegistroNotasApi.Models.Chapter", b =>
+                {
+                    b.HasOne("RegistroNotasApi.Models.Course", "course")
+                        .WithMany("chapters")
+                        .HasForeignKey("courseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("course");
+                });
+
+            modelBuilder.Entity("RegistroNotasApi.Models.CourseRegistration", b =>
+                {
+                    b.HasOne("RegistroNotasApi.Models.Course", "course")
+                        .WithMany("courseRegistrations")
+                        .HasForeignKey("courseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RegistroNotasApi.Models.Registration", "registration")
+                        .WithMany("courseRegistrations")
+                        .HasForeignKey("registrationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("course");
+
+                    b.Navigation("registration");
+                });
+
+            modelBuilder.Entity("RegistroNotasApi.Models.Exam", b =>
+                {
+                    b.HasOne("RegistroNotasApi.Models.Chapter", "chapter")
+                        .WithMany("exams")
+                        .HasForeignKey("chapterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("chapter");
+                });
+
+            modelBuilder.Entity("RegistroNotasApi.Models.PS", b =>
+                {
+                    b.HasOne("RegistroNotasApi.Models.Facultad", "facultad")
+                        .WithMany("pSs")
+                        .HasForeignKey("facultadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("facultad");
+                });
+
+            modelBuilder.Entity("RegistroNotasApi.Models.Question", b =>
+                {
+                    b.HasOne("RegistroNotasApi.Models.Exam", "exam")
+                        .WithMany("questions")
+                        .HasForeignKey("examId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("exam");
+                });
+
+            modelBuilder.Entity("RegistroNotasApi.Models.Registration", b =>
+                {
+                    b.HasOne("RegistroNotasApi.Models.PS", "pS")
+                        .WithMany("registrations")
+                        .HasForeignKey("psId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RegistroNotasApi.Models.Semester", "semester")
+                        .WithMany("registrations")
+                        .HasForeignKey("semesterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RegistroNotasApi.Models.Student", "student")
+                        .WithMany("registrations")
+                        .HasForeignKey("studentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("pS");
+
+                    b.Navigation("semester");
+
+                    b.Navigation("student");
+                });
+
+            modelBuilder.Entity("RegistroNotasApi.Models.TeacherCourse", b =>
+                {
+                    b.HasOne("RegistroNotasApi.Models.Course", "course")
+                        .WithMany("teacherCourses")
+                        .HasForeignKey("courseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RegistroNotasApi.Models.Teacher", "teacher")
+                        .WithMany("teacherCourses")
+                        .HasForeignKey("teacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("course");
+
+                    b.Navigation("teacher");
+                });
+
+            modelBuilder.Entity("RegistroNotasApi.Models.Chapter", b =>
+                {
+                    b.Navigation("exams");
+                });
+
+            modelBuilder.Entity("RegistroNotasApi.Models.Course", b =>
+                {
+                    b.Navigation("chapters");
+
+                    b.Navigation("courseRegistrations");
+
+                    b.Navigation("teacherCourses");
+                });
+
+            modelBuilder.Entity("RegistroNotasApi.Models.Exam", b =>
+                {
+                    b.Navigation("questions");
+                });
+
+            modelBuilder.Entity("RegistroNotasApi.Models.Facultad", b =>
+                {
+                    b.Navigation("pSs");
+                });
+
+            modelBuilder.Entity("RegistroNotasApi.Models.PS", b =>
+                {
+                    b.Navigation("registrations");
+                });
+
             modelBuilder.Entity("RegistroNotasApi.Models.Question", b =>
                 {
                     b.Navigation("alternatives");
+
+                    b.Navigation("answers");
+                });
+
+            modelBuilder.Entity("RegistroNotasApi.Models.Registration", b =>
+                {
+                    b.Navigation("courseRegistrations");
+                });
+
+            modelBuilder.Entity("RegistroNotasApi.Models.Semester", b =>
+                {
+                    b.Navigation("registrations");
+                });
+
+            modelBuilder.Entity("RegistroNotasApi.Models.Student", b =>
+                {
+                    b.Navigation("registrations");
+                });
+
+            modelBuilder.Entity("RegistroNotasApi.Models.Teacher", b =>
+                {
+                    b.Navigation("teacherCourses");
                 });
 #pragma warning restore 612, 618
         }
